@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Go wasm</title>
+    <script src="wasm_exec.js"></script>
+    <script>
+      const WASM_URL = 'wasm/app.wasm';
+      let wasm;
+
+      function init() {
+        const go = new Go();
+
+        if ('instantiateStreaming' in WebAssembly) {
+          WebAssembly.instantiateStreaming(fetch(WASM_URL), go.importObject).then(function (obj) {
+            wasm = obj.instance;
+            go.run(wasm);
+          });
+        }
+      }
+
+      init();
+
+      function wasmSignInCall() {
+        alert(wasmSignIn('Sergey'));
+      }
+
+      function wasmReadDataCall() {
+        console.log(wasmReadData());
+      }
+    </script>
+  </head>
+
+  <body>
+    <button onClick="wasmSignInCall();" id="textTestButton">Sign In</button>
+    <button onClick="wasmReadDataCall();" id="calcTestButton">Read data</button>
+  </body>
+</html>
